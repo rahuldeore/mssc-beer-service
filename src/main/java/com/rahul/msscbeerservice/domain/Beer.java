@@ -1,4 +1,4 @@
-package com.rahul.msscbeerservice.web.domain;
+package com.rahul.msscbeerservice.domain;
 
 import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.AllArgsConstructor;

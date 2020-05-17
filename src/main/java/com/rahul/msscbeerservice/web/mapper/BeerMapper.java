@@ -1,6 +1,6 @@
 package com.rahul.msscbeerservice.web.mapper;
 
-import com.rahul.msscbeerservice.web.domain.Beer;
+import com.rahul.msscbeerservice.domain.Beer;
 import com.rahul.msscbeerservice.web.model.BeerDto;
 import org.mapstruct.Mapper;
 
