@@ -4,12 +4,14 @@ import com.rahul.msscbeerservice.web.model.BeerDto;
 import com.rahul.msscbeerservice.web.model.BeerPagedList;
 import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 /**
  * Created by Rahul on 5/16/20
  */
+@Service
 public interface BeerService {
     BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand);
 

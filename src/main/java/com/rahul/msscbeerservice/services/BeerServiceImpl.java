@@ -5,7 +5,7 @@ import com.rahul.msscbeerservice.web.model.BeerPagedList;
 import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.UUID;
@@ -14,7 +14,7 @@ import java.util.UUID;
  * Created by Rahul on 5/16/20
  */
 @RequiredArgsConstructor
-@Component
+@Service
 public class BeerServiceImpl implements BeerService {
 
     @Override
