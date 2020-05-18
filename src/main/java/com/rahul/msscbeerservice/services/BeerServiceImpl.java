@@ -101,6 +101,22 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public BeerDto getByUpc(String upc) {
-        return null;
+        Beer beer = beerRepository.findByUpc(upc);
+        if (beer != null) {
+            return beerMapper.beerToBeerDto(beer);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean deleteBeer(UUID beerId) {
+        Optional<Beer> beerOptional = beerRepository.findById(beerId);
+        if (beerOptional.isPresent()) {
+            beerRepository.deleteById(beerId);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

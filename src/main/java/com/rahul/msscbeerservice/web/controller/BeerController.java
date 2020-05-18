@@ -64,7 +64,6 @@ public class BeerController {
 
     @PostMapping
     public ResponseEntity saveNewBeer(@RequestBody BeerDto beerDto) {
-        // check for null beerDto
         if (beerDto != null) {
             beerService.saveNewBeer(beerDto);
             return new ResponseEntity(HttpStatus.CREATED);
@@ -83,9 +82,12 @@ public class BeerController {
         }
     }
 
-    @DeleteMapping("/{beerId")
-    public ResponseEntity deleteBeer(@RequestParam(name = "beerId", required = false) UUID beerId) {
-        return null;
+    @DeleteMapping("/{beerId}")
+    public ResponseEntity deleteBeer(@PathVariable UUID beerId) {
+        if (beerService.deleteBeer(beerId)) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
 }
