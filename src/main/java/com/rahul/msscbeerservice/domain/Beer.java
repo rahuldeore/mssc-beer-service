@@ -1,23 +1,17 @@
 package com.rahul.msscbeerservice.domain;
 
-import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Positive;
+import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -36,28 +30,24 @@ public class Beer {
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @Null
-    private Integer version;
+    @Version
+    private Long version;
 
-    @NotBlank
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp createdDate;
+
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
+
     private String beerName;
+    private String beerStyle;
 
-    @NotNull
-    private BeerStyleEnum beerStyle;
+    @Column(unique = true)
+    private String upc;
 
-    @Positive
-    @NotNull
-    private Long upc;
-
-    @Positive
-    @NotNull
     private BigDecimal price;
 
-    private Integer quantityOnHand;
-
-    @Null
-    private OffsetDateTime createDate;
-
-    @Null
-    private OffsetDateTime lastModifiedDate;
+    private Integer minOnHand;
+    private Integer quantityToBrew;
 }

@@ -1,5 +1,6 @@
 package com.rahul.msscbeerservice.services;
 
+import com.rahul.msscbeerservice.repositories.BeerRepository;
 import com.rahul.msscbeerservice.web.model.BeerDto;
 import com.rahul.msscbeerservice.web.model.BeerPagedList;
 import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
@@ -16,6 +17,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class BeerServiceImpl implements BeerService {
+
+    private final BeerRepository beerRepository;
 
     @Override
     public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
