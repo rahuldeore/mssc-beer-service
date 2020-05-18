@@ -55,17 +55,37 @@ public class BeerController {
 
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@PathVariable("beerId") UUID beerId) {
-        return new ResponseEntity<>(BeerDto.builder().build(), HttpStatus.OK);
+        BeerDto beer = beerService.getById(beerId,false);
+        if (beer == null) {
+            return new ResponseEntity<>(beer, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(beer, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity saveNewBeer(@RequestBody BeerDto beerDto) {
-        return new ResponseEntity(HttpStatus.CREATED);
+        // check for null beerDto
+        if (beerDto != null) {
+            beerService.saveNewBeer(beerDto);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity updateBeer(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<BeerDto> updateBeer(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
+        BeerDto updateBeer = beerService.updateBeer(beerId, beerDto);
+        if (updateBeer != null) {
+            return new ResponseEntity(updateBeer, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{beerId")
+    public ResponseEntity deleteBeer(@RequestParam(name = "beerId", required = false) UUID beerId) {
+        return null;
     }
 
 }

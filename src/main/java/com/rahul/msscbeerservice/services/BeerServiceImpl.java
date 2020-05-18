@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -65,17 +66,37 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public BeerDto getById(UUID beerId, Boolean showInventoryOnHand) {
-        return null;
+        Optional<Beer> beerOptional = beerRepository.findById(beerId);
+        if (beerOptional.isEmpty()) {
+            return null;
+        } else {
+            BeerDto beerDto = beerMapper.beerToBeerDto(beerOptional.get());
+            return beerDto;
+        }
     }
 
     @Override
     public BeerDto saveNewBeer(BeerDto beerDto) {
-        return null;
+        Beer newBeer = beerMapper.beerDtoToBeer(beerDto);
+        beerRepository.save(newBeer);
+        return beerDto;
     }
 
     @Override
     public BeerDto updateBeer(UUID beerId, BeerDto beerDto) {
-        return null;
+        Optional<Beer> beerOptional = beerRepository.findById(beerId);
+        Beer beer;
+        if (beerOptional.isPresent()) {
+            beer = beerOptional.get();
+            beer.setBeerName(beerDto.getBeerName());
+            beer.setBeerStyle(beerDto.getBeerStyle().toString());
+            beer.setPrice(beerDto.getPrice());
+            beer.setMinOnHand(beerDto.getQuantityOnHand());
+            beerRepository.save(beer);
+            return beerMapper.beerToBeerDto(beer);
+        } else {
+            return null;
+        }
     }
 
     @Override
