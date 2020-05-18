@@ -5,6 +5,7 @@ import com.rahul.msscbeerservice.web.model.BeerDto;
 import com.rahul.msscbeerservice.web.model.BeerPagedList;
 import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ public class BeerController {
                                                                 BeerStyleEnum beerStyle,
                                                     @RequestParam (value = "showInventoryOnHand", required = false)
                                                                 Boolean showInventoryOnHand) {
+
         if (showInventoryOnHand == null) {
             showInventoryOnHand = false;
         }
@@ -45,7 +47,8 @@ public class BeerController {
             pageSize = DEFAULT_PAGE_SIZE;
         }
 
-        BeerPagedList beerPagedList = beerService.listBeers(beerName, beerStyle, null, false);
+        BeerPagedList beerPagedList = beerService.listBeers(beerName, beerStyle, PageRequest.of(pageNumber, pageSize),
+                showInventoryOnHand);
 
         return new ResponseEntity<BeerPagedList>(beerPagedList, HttpStatus.OK);
     }
