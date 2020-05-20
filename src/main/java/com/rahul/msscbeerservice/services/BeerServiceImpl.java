@@ -54,7 +54,9 @@ public class BeerServiceImpl implements BeerService {
         beerPagedList = new BeerPagedList(beerPage
                 .getContent()
                 .stream()
-                .map(beerMapper::beerToBeerDto)
+                .map(showInventoryOnHand == true ?
+                        beerMapper::beerToBeerDtoWithInventory :
+                        beerMapper::beerToBeerDto)
                 .collect(Collectors.toList()),
                 PageRequest
                         .of(beerPage.getPageable().getPageNumber(),
@@ -70,7 +72,8 @@ public class BeerServiceImpl implements BeerService {
         if (beerOptional.isEmpty()) {
             return null;
         } else {
-            BeerDto beerDto = beerMapper.beerToBeerDto(beerOptional.get());
+            BeerDto beerDto = showInventoryOnHand == true ? beerMapper.beerToBeerDtoWithInventory(beerOptional.get()) :
+                    beerMapper.beerToBeerDto(beerOptional.get());
             return beerDto;
         }
     }
