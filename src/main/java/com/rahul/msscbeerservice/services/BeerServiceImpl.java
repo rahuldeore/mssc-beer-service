@@ -8,6 +8,7 @@ import com.rahul.msscbeerservice.web.model.BeerPagedList;
 import com.rahul.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,12 @@ public class BeerServiceImpl implements BeerService {
 
     private final BeerMapper beerMapper;
 
+    @Cacheable(cacheNames = "beerListCache", condition = "#showInventoryOnHand == false")
     @Override
     public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
         List<BeerDto> beerDtos = new LinkedList<>();
+
+        System.out.println("I was called");
 
         List<Beer> beers = beerRepository.findAll();
         Page<Beer> beerPage;
@@ -66,6 +70,7 @@ public class BeerServiceImpl implements BeerService {
         return beerPagedList;
     }
 
+    @Cacheable(cacheNames = "beerCache", key = "#beerId", condition = "#showInventoryOnHand == false")
     @Override
     public BeerDto getById(UUID beerId, Boolean showInventoryOnHand) {
         Optional<Beer> beerOptional = beerRepository.findById(beerId);
@@ -75,6 +80,25 @@ public class BeerServiceImpl implements BeerService {
             BeerDto beerDto = showInventoryOnHand == true ? beerMapper.beerToBeerDtoWithInventory(beerOptional.get()) :
                     beerMapper.beerToBeerDto(beerOptional.get());
             return beerDto;
+        }
+    }
+
+    @Cacheable (cacheNames = "beerUpcCache", key = "#upc", condition = "#showInventoryOnHand == false")
+    @Override
+    public BeerDto getByUpc(String upc, Boolean showInventoryOnHand) {
+
+        System.out.println("I was called");
+
+        Beer beer = beerRepository.findByUpc(upc);
+        if (beer != null) {
+            System.out.println("Found beer for UPC: " + beer.getUpc());
+            if (showInventoryOnHand != null && showInventoryOnHand == true) {
+                return beerMapper.beerToBeerDtoWithInventory(beer);
+            } else {
+                return beerMapper.beerToBeerDto(beer);
+            }
+        } else {
+            return null;
         }
     }
 
@@ -96,16 +120,6 @@ public class BeerServiceImpl implements BeerService {
             beer.setPrice(beerDto.getPrice());
             beer.setMinOnHand(beerDto.getQuantityOnHand());
             beerRepository.save(beer);
-            return beerMapper.beerToBeerDto(beer);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public BeerDto getByUpc(String upc) {
-        Beer beer = beerRepository.findByUpc(upc);
-        if (beer != null) {
             return beerMapper.beerToBeerDto(beer);
         } else {
             return null;

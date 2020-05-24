@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class BeerPagedList extends PageImpl<BeerDto> implements Serializable {
 
+    static final long serialVersionUID = 6443230264864997894L;
     public BeerPagedList(List<BeerDto> content, Pageable pageable, long total) {
         super(content, pageable, total);
     }

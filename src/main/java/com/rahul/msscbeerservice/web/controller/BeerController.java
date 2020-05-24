@@ -25,16 +25,16 @@ public class BeerController {
 
     private final BeerService beerService;
 
-    @GetMapping (produces = "application/json")
-    public ResponseEntity<BeerPagedList> getAllBeer(@RequestParam (value = "pageNumber", required = false)
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<BeerPagedList> getAllBeer(@RequestParam(value = "pageNumber", required = false)
                                                                 Integer pageNumber,
-                                                    @RequestParam (value = "pageSize", required = false)
+                                                    @RequestParam(value = "pageSize", required = false)
                                                             Integer pageSize,
-                                                    @RequestParam (value = "beerName", required = false)
+                                                    @RequestParam(value = "beerName", required = false)
                                                                 String beerName,
-                                                    @RequestParam (value = "beerStyle", required = false)
+                                                    @RequestParam(value = "beerStyle", required = false)
                                                                 BeerStyleEnum beerStyle,
-                                                    @RequestParam (value = "showInventoryOnHand", required = false)
+                                                    @RequestParam(value = "showInventoryOnHand", required = false)
                                                                 Boolean showInventoryOnHand) {
 
         if (showInventoryOnHand == null) {
@@ -60,11 +60,19 @@ public class BeerController {
         if (showInventoryOnHand == null) {
             showInventoryOnHand = false;
         }
-        BeerDto beer = beerService.getById(beerId,showInventoryOnHand);
+        BeerDto beer = beerService.getById(beerId, showInventoryOnHand);
         if (beer == null) {
             return new ResponseEntity<>(beer, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(beer, HttpStatus.OK);
+    }
+
+    @GetMapping (path = "/upc/{upc}")
+    public ResponseEntity<BeerDto> getBeerByUPC(@PathVariable (name = "upc") String upc,
+                                @RequestParam (name = "showInventoryOnHand", required = false)
+                                        Boolean showInventoryOnHand) {
+        BeerDto beerDto = beerService.getByUpc(upc, showInventoryOnHand);
+        return new ResponseEntity<BeerDto>(beerDto, HttpStatus.OK);
     }
 
     @PostMapping
@@ -94,5 +102,4 @@ public class BeerController {
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
-
 }

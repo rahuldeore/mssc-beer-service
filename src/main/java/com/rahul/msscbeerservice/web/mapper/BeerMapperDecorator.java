@@ -3,6 +3,7 @@ package com.rahul.msscbeerservice.web.mapper;
 import com.rahul.msscbeerservice.domain.Beer;
 import com.rahul.msscbeerservice.services.inventory.InventoryService;
 import com.rahul.msscbeerservice.web.model.BeerDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,12 +16,12 @@ public abstract class BeerMapperDecorator implements BeerMapper {
 
     private BeerMapper beerMapper;
 
-    //@Autowired
+    @Autowired
     public void setBeerInventoryService(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
 
-    //@Autowired
+    @Autowired
     public void setMapper(BeerMapper mapper) {
         this.beerMapper = mapper;
     }
