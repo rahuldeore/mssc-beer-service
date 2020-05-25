@@ -83,20 +83,16 @@ public class BeerServiceImpl implements BeerService {
         }
     }
 
-    @Cacheable (cacheNames = "beerUpcCache", key = "#upc", condition = "#showInventoryOnHand == false")
+    @Cacheable (cacheNames = "beerUpcCache")
     @Override
-    public BeerDto getByUpc(String upc, Boolean showInventoryOnHand) {
+    public BeerDto getByUpc(String upc) {
 
         System.out.println("I was called");
 
         Beer beer = beerRepository.findByUpc(upc);
         if (beer != null) {
             System.out.println("Found beer for UPC: " + beer.getUpc());
-            if (showInventoryOnHand != null && showInventoryOnHand == true) {
-                return beerMapper.beerToBeerDtoWithInventory(beer);
-            } else {
-                return beerMapper.beerToBeerDto(beer);
-            }
+            return beerMapper.beerToBeerDto(beer);
         } else {
             return null;
         }

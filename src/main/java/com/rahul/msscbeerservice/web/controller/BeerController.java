@@ -71,7 +71,7 @@ public class BeerController {
     public ResponseEntity<BeerDto> getBeerByUPC(@PathVariable (name = "upc") String upc,
                                 @RequestParam (name = "showInventoryOnHand", required = false)
                                         Boolean showInventoryOnHand) {
-        BeerDto beerDto = beerService.getByUpc(upc, showInventoryOnHand);
+        BeerDto beerDto = beerService.getByUpc(upc);
         return new ResponseEntity<BeerDto>(beerDto, HttpStatus.OK);
     }
 
